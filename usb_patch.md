@@ -1,4 +1,183 @@
 
+
+### how通update clover
+in hackintools
+
+[latest clover](https://sourceforge.net/projects/cloverefiboot/files/Bootable_ISO/)
+
+
+### need to test today 2019/8/16
+## test the 10.14.5 HDMI1.4 destrop
+>and I get the full range of resolutions!
+>some one tested failed in mobile notbook
+```
+no "Inject Intel"
+empty ig-platform-id;
+simply install the latest Lilu and Whatevergreen to /L/E
+only FakeSMC in other/
+only use hdmi
+```
+```
+Connector Type: HDMI
+Device Type: Digital Television
+1920 x 1080 (60p Hz)
+1920 x 1080 (30p Hz)
+1920 x 1080 (24p Hz)
+1920 x 1080 (50i Hz)
+1920 x 1080 (60i Hz)
+1920 x 1080 (50p Hz)
+1920 x 1080 (25p Hz)
+3840 x 2160 (24p Hz)
+3840 x 2160 (30p Hz)
+3840 x 2160 (25p Hz)
+4096 x 2160 (24p Hz)
+```
+[to find lilu or whatevergreen is load](https://www.tonymacx86.com/threads/how-can-i-tell-if-lilu-and-whatevergreen-are-active-loaded.262385/)
+
+>only loaded and started 
+```
+ "About This Mac" > "Overview" > "System Report..." > "Software" > "Extensions"
+```
+
+>use IOreg  all loaded include loaded but not started 
+```
+Look in ioreg. You should find both Lilu and WhateverGreen under the IOResources node.
+```
+
+
+
+## for hd4600 hdmi 4k 60HZ for lower version macos such as under 10.13.5 and under 10.14.2
+
+[hd4600_4k_60HZ](https://www.reddit.com/r/hackintosh/comments/3zt8ti/4k_uhd_with_hd_4600_displayport/)
+[hd4600_4k](https://www.tonymacx86.com/threads/solved-4k-display-no-4k-resolution-available.196942/)
+
+
+4K UHD with HD 4600 DisplayPort
+
+>After some tinkering with toleda's framebuffer patch script and a config file with framebuffer edits in his >audio_CloverHDMI repository on github, I finally got it working. I fine-tuned the patches I would set in Clover >with Piker-Alpha's AppleIntelFramebufferAzul.sh.
+
+This post really helped me get on track.
+
+>My BIOS settings regarding IGFX are as follows.
+ 
+```
+Init Display is set to PCIe 1, 
+memory allocations is set to 64MB,
+DVMT is set to MAX.
+```
+
+>Here is part of the KernelAndKextPatches/KextsToPatch section of my config.plist:
+
+```
+<dict>
+    <key>Name</key>
+    <string>AppleIntelFramebufferAzul</string>
+    <key>Find</key>
+    <data>AwAiDQADAwMAAAACAAAwAQ==</data>
+    <key>Replace</key>
+    <data>AwAiDQADAwMAAAAEAAAgAg==</data>
+    <key>Comment</key>
+    <string>Increse BIOS-allocated memory to 64MB and framebuffer size to 34MB</string>
+</dict>
+```
+```
+<dict>
+    <key>Name</key>
+    <string>AppleIntelFramebufferAzul</string>
+    <key>Find</key>
+    <data>AQUJAAAEAACHAAAA</data>
+    <key>Replace</key>
+    <data>AQUJAAAIAAAGAAAA</data>
+    <key>Comment</key>
+    <string>10.10-Azul-Port_0x5-DP2HDMI</string>
+</dict>
+```
+```
+<dict>
+    <key>Name</key>
+    <string>AppleIntelFramebufferAzul</string>
+    <key>Find</key>
+    <data>AgQKAAAEAACHAAAA</data>
+    <key>Replace</key>
+    <data>AgQKAAACAAAGAAAA</data>
+    <key>Comment</key>
+    <string>10.10-Azul-Port_0x6-DP2DVI</string>
+</dict>
+```
+```
+<dict>
+    <key>Name</key>
+    <string>AppleIntelFramebufferAzul</string>
+    <key>Find</key>
+    <data>AwYIAAAEAAARAAAA</data>
+    <key>Replace</key>
+    <data>AwYIAAAEAAAAAAAA</data>
+    <key>Comment</key>
+    <string>10.10-Azul-Port_0x7-DP</string>
+</dict>
+```
+>HDMI now also displays at 3840x2160@30Hz. This means I could drive two 4K displays from my integrated graphics, for a total of four.
+
+>If anyone knows how to unlock the extra 30Hz to get to 60Hz, please let me know!
+
+>I got it working with 60hz on El Capitan 10.11.4 with Clover 3389 - tested only Displayport so far. Board is a Intel DH87RL.
+
+>My config.plist contains only this simple patch:
+>This unlocks 4k at 30hz. only Displayport
+
+```
+<dict>
+    <key>Comment</key>
+    <string>framebuffer4K</string>
+    <key>Find</key>
+    <data>
+    AwAiDQADAwMAAAACAAAwAQ==
+    </data>
+    <key>Name</key>
+    <string>AppleIntelFramebufferAzul</string>
+    <key>Replace</key>
+    <data>
+    AwAiDQADAwMAAAAEAAAAAw==
+    </data>
+</dict>
+```
+
+
+To get 60hz working I've used the [IOKit Clock patch](https://github.com/Floris497/mac-pixel-clock-patch-V2/) To apply it you have to disable SIP (System Integrity Protection). This can by archived by adding the following to the config.plist:
+```
+<key>RtVariables</key>
+<dict>
+    <key>BooterConfig</key>
+    <string>0x28</string>
+    <key>CsrActiveConfig</key>
+    <string>0x67</string>
+</dict>
+```
+
+
+
+
+
+
+>the third patch we not try
+```
+<dict>
+    <key>Comment</key>
+    <string>Framebuffer for 4K display</string>
+    <key>Find</key>
+    <data>
+    AwAiDQADAwMAAAACAAAwAQAAAAAAAABgmRQ=
+    </data>
+    <key>Name</key>
+    <string>AppleIntelFramebufferAzul</string>
+    <key>Replace</key>
+    <data>
+    AwAiDQADAwMAAAAEAAAgAgAAAAAAAACAmRQ=
+    </data>
+</dict>
+```
+
+
 ### 10.14.5 不完美的地方
 1，开机log会打印 ppgtt
 > 修改为下
