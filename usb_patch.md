@@ -1,6 +1,40 @@
 
 
-### how通update clover
+### x16-96072 will install macos 10.13.6 in ssd
+
+### today
+```
+1,ccc 拷贝的新的分区，用disk unity工具讲10.13.6分区新建个128的大小 安装10.14.5系统
+```
+### and then enable hidpi
+[enable_hidpi](https://github.com/syscl/Enable-HiDPI-OSX)
+
+
+### clover 启动盘 有如下区别
+```
+10.13.6上只需要硬盘名称即可，uuid没测试，应该更加可以。
+10.14.5上硬盘名称在开机的时候名称会减少一个字节，用uuid即可。
+```
+
+
+### hd4600 mobile support hdmi 4k only 30Hz just tested ok
+>use below setting
+```
+1,仿冒id为0d260007，device 里面的可以删除掉（之前是0x04128086）
+2,clover 版本update to 5045（没有什么影响，只是陈述我的环境）
+3，smbiso 选择Macbook Pro11,4（这个应该关系不大，主要是跟端口有段，比如11,3就不可以，多个独显多个端口，经测试11,1,11,2,11,4，air6,2均可以）
+4, both macos 10.13.6 and 10.14.5 supported
+```
+>存在问题有
+```
+1,cannot auto adjust the backlight
+2,only 4k 30Hz,no 60Hz,1080p has 60Hz
+3,no 2k
+4,if connect hdmi ,no hdmi audio
+5,if connect hdmi ,can not adjust inter display blacklight
+```
+
+### how to update clover
 in hackintools
 
 [latest clover](https://sourceforge.net/projects/cloverefiboot/files/Bootable_ISO/)
