@@ -1,8 +1,60 @@
 
 
+### 依托GitHub搭建个人Blog
+[github_blog](https://zhuanlan.zhihu.com/p/52341765)
+>步骤
+
+```
+curl https://raw.github.com/creationix/nvm/v0.33.11/install.sh | sh
+wget -qO- https://raw.github.com/creationix/nvm/v0.33.11/install.sh | sh
+nvm install stable
+```
+
 ### x16-96072 will install macos 10.13.6 in ssd
 
-### today
+
+### today brightness 
+[小兵的亮度调节](https://blog.daliansky.net/CoffeeLake-UHD-630-black-screen-direct-bright-screen-and-correct-adjustment-of-brightness-adjustment.html)
+>台式机/笔记本 步骤是
+
+```
+1,EFI 里移除 移除SSDT-PNLF.aml
+2，clover config.plist 里 取消勾选AddPNLF
+3，clover config.plist 里 添加 如下
+	Boot Args添加引导参数：igfxcflbklt=force
+	Devices/Properties添加：enable-cfl-backlight-fix参数设置为01000000
+```
+
+>笔记本步骤是
+```
+1,添加：change GFX0 to IGPU重命名
+2,勾选AddPNLF选项或者添加SSDT-PNLF_CoffeeLake.aml，
+```
+[SSDT-PNLF_CoffeeLake.aml](https://github.com/daliansky/XiaoMi-GLP/raw/dev/EFI/CLOVER/ACPI/patched/SSDT-PNLF_CoffeeLake.aml)
+
+[dsdt_patch](https://webcache.googleusercontent.com/search?q=cache:UCw4MC8GDUUJ:https://www.douban.com/note/526541270/+&cd=1&hl=zh-CN&ct=clnk&gl=tw)
+>前提是 开启QE/CI 硬件加速（水波纹）
+
+1,DSDT "Brightness Fix"
+2,使用 Kext Wizard 安装 IntelBacklight.kext ，同时修复权限／重建缓存
+3,重启
+
+
+>可以参考下面的uhd630的亮度驱动，用hackintools离开驱动
+[udh630_light](https://www.bilibili.com/read/cv3081058/)
+>步骤是 ，2种方法，如果1不行 则用2
+
+```
+1，ccc中将ACPI 添加 "change GFX0to IGPU" 勾选 "添加PNLF"，重启
+2，加上SSDT-PNLF_CoffeeLake.aml 放在clover/A/p 添加"change GFX0to IGPU" 取消勾选"添加PNLF",重启
+```
+
+
+>其它完美的参考efi 也是630 balcklight
+[o_630](https://github.com/MacsedProtoss/hackintosh)
+
+
+### hidpi is ok include inline and lg 4k display
 ```
 1,ccc 拷贝的新的分区，用disk unity工具讲10.13.6分区新建个128的大小 安装10.14.5系统
 ```
